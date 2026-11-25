@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Nerd • Portal Nerd</title>
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --surface: #141923;
+            --surface-2: #1c2331;
+            --accent: #ff2e63;
+            --accent-2: #00d9f5;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --border: #263042;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+        header {
+            background: linear-gradient(135deg, #1b1128 0%, #0b0e14 70%);
+            border-bottom: 2px solid var(--accent);
+            padding: 24px 16px;
+            text-align: center;
+        }
+        header h1 { margin: 0; font-size: 24px; }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        nav a.active { border-color: var(--accent-2); color: var(--accent-2); }
+        .container {
+            max-width: 720px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+        .box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+        }
+        .pergunta { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+        .opcao {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text);
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .opcao:hover { border-color: var(--accent-2); }
+        .btn-primario {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .resultado { margin-top: 16px; font-size: 16px; font-weight: 700; color: var(--accent-2); }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎮 Quiz Nerd</h1>
+        <nav>
+            <a href="index.html">Feed</a>
+            <a href="quiz.html" class="active">Quiz Nerd</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="box" id="quiz-box"></div>
+    </main>
+
+    <script>
+        const perguntas = [{"pergunta": "Em One Punch Man, qual é o apelido do som que faz os inimigos tremerem perto do King?", "opcoes": ["Soco Sério", "Engine do King", "Pulso Classe S", "Eco do Vazio"], "correta": 1}, {"pergunta": "Na função de ADC em um MOBA, qual é a prioridade principal no late game?", "opcoes": ["Iniciar todas as lutas sozinho", "Manter posicionamento seguro e causar dano constante", "Ficar apenas na base", "Ignorar objetivos"], "correta": 1}, {"pergunta": "Qual destes personagens faz parte do núcleo clássico de Naruto Shippuden?", "opcoes": ["Kakashi Hatake", "Saitama", "Eddie Brock", "Galactus"], "correta": 0}];
+        let indice = 0;
+        let acertos = 0;
+        const box = document.getElementById('quiz-box');
+
+        function renderPergunta() {
+            if (indice >= perguntas.length) {
+                box.innerHTML = `
+                    <h2>Resultado Final</h2>
+                    <p class="resultado">Você acertou ${acertos} de ${perguntas.length} perguntas!</p>
+                    <button class="btn-primario" onclick="reiniciar()">Jogar Novamente</button>
+                `;
+                return;
+            }
+            const atual = perguntas[indice];
+            const opcoesHtml = atual.opcoes.map((op, i) =>
+                `<button class="opcao" onclick="responder(${i})">${op}</button>`
+            ).join('');
+
+            box.innerHTML = `
+                <div style="color:#94a3b8;font-size:13px;margin-bottom:8px;">Pergunta ${indice + 1} de ${perguntas.length}</div>
+                <div class="pergunta">${atual.pergunta}</div>
+                <div>${opcoesHtml}</div>
+            `;
+        }
+
+        function responder(escolha) {
+            if (escolha === perguntas[indice].correta) acertos++;
+            indice++;
+            renderPergunta();
+        }
+
+        function reiniciar() {
+            indice = 0;
+            acertos = 0;
+            renderPergunta();
+        }
+
+        renderPergunta();
+    </script>
+</body>
+</html>
